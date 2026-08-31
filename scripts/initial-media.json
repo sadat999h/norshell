@@ -1,0 +1,30 @@
+[
+  {
+    "storageKey": "brand/norshell-wordmark.jpg",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/brand/norshell-wordmark.jpg"
+  },
+  {
+    "storageKey": "collection/paired-leather-bags.png",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/collection/paired-leather-bags.png"
+  },
+  {
+    "storageKey": "collection/sunlit-table.jpg",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/collection/sunlit-table.jpg"
+  },
+  {
+    "storageKey": "story/quiet-stay.jpg",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/story/quiet-stay.jpg"
+  },
+  {
+    "storageKey": "highlights/nore-campaign.jpg",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/highlights/nore-campaign.jpg"
+  },
+  {
+    "storageKey": "products/black-commute.webp",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/products/black-commute.webp"
+  },
+  {
+    "storageKey": "products/cafe-set.webp",
+    "url": "https://qkllgrjlooflwujwozqv.supabase.co/storage/v1/object/public/norshell-media/products/cafe-set.webp"
+  }
+]
