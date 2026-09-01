@@ -30,13 +30,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f5f3ef] text-[#211c18]">
-      <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-6 text-white sm:px-8 lg:px-12">
+      <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between bg-[#0b1a3d] px-5 py-6 text-white sm:px-8 lg:px-12">
         <a href="#collection" className="hidden text-xs uppercase tracking-[.18em] lg:block">Collection</a>
         <Link href="/" className="font-serif text-[1.7rem] tracking-[-0.07em] sm:text-3xl">NORSHELL</Link>
         <div className="hidden items-center gap-7 lg:flex"><a href="#story" className="text-xs uppercase tracking-[.18em]">Story</a><Link href="/admin" className="text-xs uppercase tracking-[.18em]">Admin</Link></div>
         <button onClick={() => setMenuOpen(value => !value)} className="grid h-10 w-10 place-items-center lg:hidden" aria-label="Toggle navigation">{menuOpen ? <X /> : <Menu />}</button>
       </header>
-      {menuOpen ? <nav className="fixed inset-0 z-20 flex flex-col justify-center gap-7 bg-[#3f2b20] px-9 text-4xl text-white lg:hidden"><a onClick={() => setMenuOpen(false)} href="#collection">Collection</a><a onClick={() => setMenuOpen(false)} href="#story">Story</a><Link onClick={() => setMenuOpen(false)} href="/admin">Admin</Link></nav> : null}
+      {menuOpen ? <nav className="fixed inset-0 z-20 flex flex-col justify-center gap-7 bg-white px-9 text-4xl text-black lg:hidden"><a onClick={() => setMenuOpen(false)} href="#collection">Collection</a><a onClick={() => setMenuOpen(false)} href="#story">Story</a><Link onClick={() => setMenuOpen(false)} href="/admin">Admin</Link></nav> : null}
 
       <section className="relative min-h-[min(760px,100svh)] overflow-hidden bg-[#4a3325] text-white">
         {hero ? <img src={hero.imageUrl} alt={hero.altText || "Norshell leather collection"} className="absolute inset-0 h-full w-full object-cover opacity-80 motion-safe:animate-[ns-reveal_1.2s_cubic-bezier(.23,1,.32,1)]" /> : null}
