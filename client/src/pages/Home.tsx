@@ -1,5 +1,5 @@
 import { ArrowDownRight, ArrowUpRight, Check, CircleArrowRight, Loader2, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { filterCollectionProducts, getProductPurchaseUrl } from "@shared/storefront";
@@ -10,6 +10,17 @@ export default function Home() {
   const { data, isLoading, isError } = trpc.storefront.get.useQuery();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeCollectionFilter, setActiveCollectionFilter] = useState<number | "all" | "upcoming">("all");
+  const heroSlides = (data?.highlights ?? []).filter(highlight => highlight.imageUrl);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+
+  // Auto-advance the hero slideshow every 5s when there's more than one image.
+  useEffect(() => {
+    if (heroSlides.length < 2) return;
+    const timer = setInterval(() => {
+      setHeroSlideIndex(index => (index + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
 
   if (isLoading) {
     return <div className="min-h-screen grid place-items-center bg-[#f4f1ed]"><Loader2 className="animate-spin text-[#6d513f]" /></div>;
@@ -24,7 +35,6 @@ export default function Home() {
   const filterableCategories = (data?.categories ?? []).filter(category => available.some(product => product.categoryId === category.id));
   const upcoming = data?.products.filter(product => product.status === "upcoming") ?? [];
   const filteredCollection = filterCollectionProducts(data?.products ?? [], activeCollectionFilter);
-  const hero = highlights[0];
   const story = data?.brandStory;
   const messengerUrl = data?.settings?.messengerUrl || "https://m.me/";
 
@@ -39,8 +49,29 @@ export default function Home() {
       {menuOpen ? <nav className="fixed inset-0 z-20 flex flex-col justify-center gap-7 bg-white px-9 text-4xl text-black lg:hidden"><a onClick={() => setMenuOpen(false)} href="#collection">Collection</a><a onClick={() => setMenuOpen(false)} href="#story">Story</a><Link onClick={() => setMenuOpen(false)} href="/admin">Admin</Link></nav> : null}
 
       <section className="relative min-h-[min(760px,100svh)] overflow-hidden bg-[#4a3325] text-white">
-        {hero ? <img src={hero.imageUrl} alt={hero.altText || "Norshell leather collection"} className="absolute inset-0 h-full w-full object-cover opacity-80 motion-safe:animate-[ns-reveal_1.2s_cubic-bezier(.23,1,.32,1)]" /> : null}
+        {heroSlides.length ? heroSlides.map((slide, index) => (
+          <img
+            key={slide.id}
+            src={slide.imageUrl}
+            alt={slide.altText || "Norshell leather collection"}
+            className={`absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-1000 ease-in-out ${index === heroSlideIndex % heroSlides.length ? "opacity-80" : "opacity-0"}`}
+          />
+        )) : null}
         <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/5 to-black/35" />
+        {heroSlides.length > 1 ? (
+          <div className="absolute inset-x-0 bottom-6 z-10 flex justify-center gap-2 sm:bottom-8">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => setHeroSlideIndex(index)}
+                aria-label={`Show slide ${index + 1}`}
+                aria-current={index === heroSlideIndex % heroSlides.length}
+                className={`h-1.5 rounded-full transition-all ${index === heroSlideIndex % heroSlides.length ? "w-6 bg-white" : "w-1.5 bg-white/40"}`}
+              />
+            ))}
+          </div>
+        ) : null}
         <div className="relative flex min-h-[min(760px,100svh)] flex-col justify-end px-5 pb-8 pt-32 sm:px-8 sm:pb-10 lg:px-12 lg:pb-14">
           <p className="ns-label text-white/75">Quietly carried</p>
           <div className="mt-5 flex flex-col justify-between gap-8 lg:flex-row lg:items-end"><h1 className="max-w-3xl font-serif text-[clamp(3.75rem,8.4vw,8.25rem)] leading-[.78] tracking-[-.075em]">Leather goods<br /><i className="font-normal">for the in-between.</i></h1><a href="#collection" className="ns-round-link self-start lg:self-auto">Explore the collection <ArrowDownRight size={19} /></a></div>
