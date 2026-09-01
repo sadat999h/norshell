@@ -1,8 +1,9 @@
 {
   "buildCommand": "vite build && esbuild server/_core/serverless.ts --platform=node --target=node20 --packages=external --bundle --format=esm --outfile=api/index.js",
   "outputDirectory": "dist/public",
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
