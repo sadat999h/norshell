@@ -1,44 +1,54 @@
-import "dotenv/config";
-import express from "express";
-import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "../routers";
-import { createContext } from "./context";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFound from "@/pages/NotFound";
+import { lazy, Suspense } from "react";
+import { Route, Switch } from "wouter";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import Home from "./pages/Home";
+import ProductDetail from "./pages/ProductDetail";
 
-// Builds the Express app (routes/middleware only — no listen()).
-// Shared by the local dev/start server (server/_core/index.ts) and the
-// Vercel serverless entry point (api/index.ts) so both stay in sync.
-export function createApp() {
-  const app = express();
-  // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  // tRPC API
-  app.use(
-    "/api/trpc",
-    createExpressMiddleware({
-      router: appRouter,
-      createContext,
-      // Cache the public storefront read at Vercel's edge for 30s (serving
-      // stale for up to 5min while it revalidates in the background). This
-      // means most visitors get an instant cached response instead of a
-      // fresh DB round-trip + cold start on every load. Admin routes are
-      // untouched — they're never matched here since they use different
-      // procedure paths.
-      responseMeta({ type, paths, errors }) {
-        const isPublicStorefrontRead =
-          type === "query" &&
-          errors.length === 0 &&
-          (paths ?? []).every(path => path === "storefront.get");
-        if (isPublicStorefrontRead) {
-          return {
-            headers: {
-              "cache-control": "public, s-maxage=30, stale-while-revalidate=300",
-            },
-          };
-        }
-        return {};
-      },
-    })
+// Loaded on its own chunk — storefront visitors never download this code.
+const Admin = lazy(() => import("./pages/Admin"));
+
+function Router() {
+  // NOTE: login is disabled for now — /admin is open to anyone with the URL.
+  // Re-add an authenticated route guard once Supabase auth is reconnected.
+  return (
+    <Switch>
+      <Route path={"/"} component={Home} />
+      <Route path={"/products/:slug"} component={ProductDetail} />
+      <Route path={"/admin"}>
+        <Suspense fallback={<div className="grid min-h-screen place-items-center text-sm text-muted-foreground">Loading admin…</div>}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path={"/404"} component={NotFound} />
+      {/* Final fallback route */}
+      <Route component={NotFound} />
+    </Switch>
   );
-  return app;
 }
+
+// NOTE: About Theme
+// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
+//   to keep consistent foreground/background color across components
+// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider
+        defaultTheme="light"
+        // switchable
+      >
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+}
+
+export default App;
