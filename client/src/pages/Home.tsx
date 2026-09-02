@@ -54,7 +54,7 @@ export default function Home() {
             key={slide.id}
             src={slide.imageUrl}
             alt={slide.altText || "Norshell leather collection"}
-            className={`absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-1000 ease-in-out ${index === heroSlideIndex % heroSlides.length ? "opacity-80" : "opacity-0"}`}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${index === heroSlideIndex % heroSlides.length ? "opacity-80" : "opacity-0"}`}
           />
         )) : null}
         <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/5 to-black/35" />
