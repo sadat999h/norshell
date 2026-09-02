@@ -18,6 +18,26 @@ export function createApp() {
     createExpressMiddleware({
       router: appRouter,
       createContext,
+      // Cache the public storefront read at Vercel's edge for 30s (serving
+      // stale for up to 5min while it revalidates in the background). This
+      // means most visitors get an instant cached response instead of a
+      // fresh DB round-trip + cold start on every load. Admin routes are
+      // untouched — they're never matched here since they use different
+      // procedure paths.
+      responseMeta({ type, paths, errors }) {
+        const isPublicStorefrontRead =
+          type === "query" &&
+          errors.length === 0 &&
+          (paths ?? []).every(path => path === "storefront.get");
+        if (isPublicStorefrontRead) {
+          return {
+            headers: {
+              "cache-control": "public, s-maxage=30, stale-while-revalidate=300",
+            },
+          };
+        }
+        return {};
+      },
     })
   );
   return app;
