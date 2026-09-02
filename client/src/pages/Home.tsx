@@ -1,4 +1,4 @@
-import { ArrowDownRight, ArrowUpRight, Check, CircleArrowRight, Loader2, Menu, X } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, CircleArrowRight, Loader2, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
@@ -78,7 +78,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-b border-[#211c18]/10 bg-[#ece8e2] px-5 py-5 sm:px-8 lg:px-12"><div className="mx-auto grid max-w-7xl gap-3 text-[11px] uppercase tracking-[.15em] text-[#66584f] sm:grid-cols-3"><span>Bangladesh designed</span><span className="sm:text-center">Refined daily carry</span><span className="sm:text-right">Made to move with you</span></div></section>
 
       <main>
         <section id="collection" className="px-5 py-24 sm:px-8 lg:px-12 lg:py-32"><div className="mx-auto max-w-7xl"><div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="ns-label">The collection</p><h2 className="ns-display mt-4 text-5xl sm:text-6xl">The daily edit.</h2></div><p className="max-w-xs text-sm leading-6 text-[#66584f]">Thoughtful shapes, tactile finishes, and a measure of room for the essentials.</p></div>
@@ -91,7 +90,6 @@ export default function Home() {
 
         <section className="px-5 py-24 sm:px-8 lg:px-12 lg:py-32"><div className="mx-auto max-w-7xl"><div className="mb-12 flex items-end justify-between"><div><p className="ns-label">Arriving next</p><h2 className="ns-display mt-4 text-5xl sm:text-6xl">On the horizon.</h2></div><span className="hidden text-xs uppercase tracking-[.15em] text-[#80614d] sm:block">Watch this space</span></div><div className="grid gap-6 sm:grid-cols-2">{upcoming.map(product => { const image = product.images[0]; return <article key={product.id} className="border-t border-[#211c18]/20 pt-5"><div className="overflow-hidden bg-[#ded6cc]">{image ? <img src={image.url} alt={image.altText || product.name} className="aspect-[16/10] w-full object-cover grayscale-[10%]" /> : null}</div><div className="mt-4 flex items-start justify-between gap-5"><div><h3 className="font-serif text-3xl tracking-[-.04em]">{product.name}</h3><p className="mt-1 text-sm text-[#77675c]">{product.shortDescription}</p></div><span className="shrink-0 border border-[#211c18]/20 px-3 py-1.5 text-[10px] uppercase tracking-[.14em]">Coming soon</span></div></article>; })}</div></div></section>
 
-        <section className="border-y border-[#211c18]/10 bg-white px-5 py-14 sm:px-8 lg:px-12"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_2fr]"><div><p className="ns-label">Payment options</p><h2 className="ns-display mt-3 text-4xl">A little later.</h2></div><div className="grid gap-3 sm:grid-cols-3">{["Cash on Delivery", "bKash", "SSLCommerz"].map(option => <div key={option} className="flex items-center gap-3 border border-[#211c18]/10 px-4 py-5 text-sm"><Check size={14} className="text-[#9a765f]" /><span>{option}</span><span className="ml-auto text-[9px] uppercase tracking-[.12em] text-[#80614d]">Soon</span></div>)}</div></div></section>
       </main>
       <footer className="bg-[#211914] px-5 py-10 text-[#f5f1eb] sm:px-8 lg:px-12"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-7 sm:flex-row sm:items-end"><div><p className="font-serif text-4xl tracking-[-.06em]">NORSHELL</p><p className="mt-3 max-w-xs text-sm leading-6 text-[#f5f1eb]/60">Leather goods for the considered everyday.</p></div><div className="flex gap-6 text-xs uppercase tracking-[.14em] text-[#f5f1eb]/70"><a href="#collection">Collection</a><a href="#story">Story</a><Link href="/admin">Admin</Link></div></div></footer>
     </div>
